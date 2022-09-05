@@ -1,0 +1,15 @@
+1662318944001	Rename package 'connection'
+1662320439878	Rename package 'repository'
+1662320478448	Rename type 'IProductRepository'
+1662320546969	Copy package
+1662320552755	Delete element
+1662320589169	Copy package
+1662320664074	Delete element
+1662320767207	Copy package
+1662320802874	Delete elements
+1662320830666	Rename package 'Connection'
+1662320845620	Rename package 'Controller'
+1662320862787	Rename package 'Model'
+1662320870968	Rename package 'Repository'
+1662321001276	Rename type 'ProductRepository'
+1662321033981	Copy compilation units

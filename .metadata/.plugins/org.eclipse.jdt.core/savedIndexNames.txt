@@ -1,0 +1,6 @@
+INDEX VERSION 1.131+C:\Users\Romildo\Documents\github-pc\dev-web-3-biblioteca\.metadata\.plugins\org.eclipse.jdt.core
+655181407.index
+1865797976.index
+3869917100.index
+1392578925.index
+2404363557.index

@@ -1,0 +1,9 @@
+INDEX VERSION 1.4+C:\Users\Romildo\Documents\github-pc\dev-web-3-biblioteca\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3272187307.index
+2224635261.index
+2404363557.index
+2446793557.index
+886974368.index
+1271548228.index
+1392578925.index
+1190231659.index
