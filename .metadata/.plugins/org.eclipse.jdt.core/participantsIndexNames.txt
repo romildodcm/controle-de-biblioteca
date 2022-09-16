@@ -3,3 +3,5 @@ C:\Users\Romildo\Documents\github-pc\test\.metadata\.plugins\org.eclipse.jst.jsp
 \Aula9full\src\main\java
 C:\Users\Romildo\Documents\github-pc\test\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1925386428.index
 \blib\src\main\java
+C:\Users\Romildo\Documents\github-pc\controle-de-biblioteca\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1925386428.index
+\blib\src\main\java
