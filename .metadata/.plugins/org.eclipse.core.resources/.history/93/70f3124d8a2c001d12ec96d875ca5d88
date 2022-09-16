@@ -1,5 +1,0 @@
-package infrastructure.connection.copy;
-
-public enum testc {
-
-}

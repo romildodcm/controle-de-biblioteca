@@ -1,27 +1,31 @@
-CREATE TABLE tbUser (
-    tbUser_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    tbUser_name VARCHAR(250) NOT NULL,
-    tbUser_username VARCHAR(64) NOT NULL,
-    tbUser_password VARCHAR(64) NOT NULL,
-    tbUser_type TINYINT(1) NOT NULL DEFAULT 1,
-    CONSTRAINT chk_tbUser_type CHECK (tbUser_type IN (0, 1)),
-    CONSTRAINT unique_tbUser_username UNIQUE (tbUser_username)
-);
+CREATE TABLE `tbUser` (
+  `tbUser_id` int NOT NULL AUTO_INCREMENT,
+  `tbUser_name` varchar(250) NOT NULL,
+  `tbUser_username` varchar(64) NOT NULL,
+  `tbUser_password` varchar(64) NOT NULL,
+  `tbUser_type` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`tbUser_id`),
+  UNIQUE KEY `unique_tbUser_username` (`tbUser_username`),
+  KEY `idx_tbUser_username` (`tbUser_username`),
+  CONSTRAINT `chk_tbUser_type` CHECK ((`tbUser_type` in (0,1)))
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE INDEX idx_tbUser_username ON tbUser (tbUser_username);
+
 
 INSERT INTO tbUser (tbUser_name, tbUser_username, tbUser_password, tbUser_type)
-VALUES ('Administrador Teste', 'admin','admin@3',0),
-("Mateus",'mateus','test@1',1);
+VALUES ('Administrador Teste', 'adminroot','adminho300',0),
+("Romildo",'romildo','romildo',1);
 
-CREATE TABLE tbBook (
-    tbBook_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    tbBook_name VARCHAR(300) NOT NULL,
-    tbBook_date DATE,
-    tbBook_author VARCHAR(250),
-    tbBook_status TINYINT(1) NOT NULL DEFAULT 1,
-    CONSTRAINT chk_tbBook_status CHECK (tbBook_status IN (1, 2, 3))
-);
+
+CREATE TABLE `tbBook` (
+  `tbBook_id` int NOT NULL AUTO_INCREMENT,
+  `tbBook_name` varchar(300) NOT NULL,
+  `tbBook_date` date DEFAULT NULL,
+  `tbBook_author` varchar(250) DEFAULT NULL,
+  `tbBook_status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`tbBook_id`),
+  CONSTRAINT `chk_tbBook_status` CHECK ((`tbBook_status` in (1,2,3)))
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO tbBook(tbBook_id,tbBook_name,tbBook_author,tbBook_date,tbBook_status)
 VALUES (NULL,'Clean Code: A Handbook of Agile Software Craftsmanship','Robert C. Martin','2011-08-11',1)
@@ -74,8 +78,3 @@ VALUES (NULL,'Clean Code: A Handbook of Agile Software Craftsmanship','Robert C.
 ,(NULL,'The Huawei Model','Yun Wen','2020-11-02',1)
 ,(NULL,'The Huawei Model','Yun Wen','2020-11-02',2)
 ,(NULL,'The Huawei Model','Yun Wen','2020-11-02',1);
-
-
--- rascunhos
-
-INSERT INTO tbBook(tbBook_name,tbBook_author,tbBook_date,tbBook_status) VALUES(?,?,?,?);

@@ -1,0 +1,78 @@
+
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@page import="org.apache.catalina.startup.ClassLoaderFactory.Repository"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="models.User, models.UserType, java.util.List"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>blib | IFPR</title>
+	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+	<link href="<%= request.getContextPath() %>/assets/css/style.css" rel="stylesheet" type="text/css" />
+	
+</head>
+<body>
+<div class="container">
+
+<header>
+    <div class="d-flex flex-column flex-md-row align-items-center pb-3 m-4 border-bottom">
+      <a href="<%= request.getContextPath() %>" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">BLIB</span>
+      </a>
+
+      <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+        <a class="me-3 py-2 text-dark text-decoration-none" href="<%= request.getContextPath() %>/books">Livros</a>
+        <a class="me-3 py-2 text-dark text-decoration-none" href="<%= request.getContextPath() %>/users">Usuários</a>
+        <a class="py-2 text-dark text-decoration-none" href="<%=request.getContextPath()%>/logout">Sair</a>
+      </nav>
+    </div>
+
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h5 class="display-4 fw-normal">Usuários Cadastrados</h5>
+      <p class="fs-5 text-muted">
+      	Nesta página você pode gerenciar os usuários cadastrados no sistema. <br />
+      	funcionalidades: cadastrar, listar, editar e excluir usuários da biblioteca.
+      </p>
+    </div>
+  </header>
+  
+  
+   <a class="btn btn-primary" href="<%= request.getContextPath() %>/register-user.jsp">Cadastrar usuário</a>
+
+
+	<% List<User> users = (List<User>) request.getAttribute("users"); %>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<td>#id</td>
+				<td>Nome</td>
+				<td>Usuário</td>
+				<td>Tipo</td>
+				<td>Opções</td>
+			</tr>
+		</thead>
+		
+		<tbody>
+	
+			<% for (User u : users) { %>
+			<tr>
+				<td><%= u.getId()%></td>
+				<td><%= u.getName()%></td>
+				<td><%= u.getUsername()%></td>
+				<td><%= u.getType().toString()%></td>
+				<td><a href="<%= request.getContextPath() %>/users/edit?id=<%= u.getId()%>">Editar</a> | <a href="<%= request.getContextPath() %>/users/delete?id=<%= u.getId()%>">Excluir</a></td>
+			</tr>
+			<% } %>
+		</tbody>
+
+	</table>
+
+
+</div>
+</body>
+</html>

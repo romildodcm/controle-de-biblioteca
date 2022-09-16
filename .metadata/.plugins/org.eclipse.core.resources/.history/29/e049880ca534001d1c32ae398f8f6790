@@ -1,0 +1,61 @@
+package servlets;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import models.Tools;
+import models.User;
+import repository.IUserRepository;
+import repository.UserRepository;
+
+@WebServlet("/users/register")
+public class UserRegisterServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		IUserRepository repository = new UserRepository();
+		req.setCharacterEncoding("utf-8");
+		// implementar verificação se username já existe
+		// verificar se o usuario pode criar usuarios novos
+		// alterar me todas as paginas para só mostrar o link para usuarios se for uma session de adm
+		
+		User user = null;
+
+        if (Tools.isStringNullOrEmpty(req.getParameter("field-name"))
+        	|| Tools.isStringNullOrEmpty(req.getParameter("field-username"))
+        	|| Tools.isStringNullOrEmpty(req.getParameter("field-password"))
+        	|| Tools.isStringNullOrEmpty(req.getParameter("field-type"))){
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/register-user.jsp");
+			dispatcher.forward(req, resp);
+        }
+        
+        if (req.getParameter("field-id") != null)
+        {
+        	user = repository.find(Integer.parseInt(req.getParameter("field-id")));
+        	req.setAttribute("errorMessage", "O usuário já está cadastrado!"); // TODO: implementar processamento dessa mensagem no front-end
+        	req.setAttribute("user", user);
+        	RequestDispatcher dispatcher = req.getRequestDispatcher("/edit-user.jsp");
+        	dispatcher.forward(req, resp);
+        } else {
+            user = new User();
+            
+			user.setName(req.getParameter("field-name"));
+			user.setUsername(req.getParameter("field-username"));
+			user.setPassword(req.getParameter("field-password"));
+			user.setType(Integer.valueOf(req.getParameter("field-type")));
+
+            repository.insert(user);
+
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/users");
+			dispatcher.forward(req, resp);
+        }
+	}
+
+}

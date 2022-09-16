@@ -1,0 +1,96 @@
+package servlets;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import models.Book;
+import models.Tools;
+import models.User;
+import models.UserType;
+import repository.IBookRepository;
+import repository.IUserRepository;
+import repository.UserRepository;
+import repository.BookRepository;
+
+@WebServlet("/books/register")
+public class BookRegisterServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		IBookRepository repository = new BookRepository();
+		req.setCharacterEncoding("utf-8");
+		String errorMessage = "";
+        
+        HttpSession session = req.getSession(false);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/books");
+        
+        try {
+        	Integer type = (Integer) session.getAttribute("type");
+            Boolean login = (Boolean) session.getAttribute("login");
+            
+        	if (type == UserType.ADMIN.toInteger() && login == true) {
+        		Book book = null;
+        		
+        		System.out.println("Log: fez login");
+        		try {
+        			if (Tools.isStringNullOrEmpty(req.getParameter("field-name"))
+        					|| Tools.isStringNullOrEmpty(req.getParameter("field-date"))
+        					|| Tools.isStringNullOrEmpty(req.getParameter("field-author"))
+        					|| Tools.isStringNullOrEmpty(req.getParameter("field-status"))){
+        				throw new Exception("Preencha todos os campos.");
+        			} else if (req.getParameter("field-id") != null)
+        			{
+        				book = repository.find(Integer.parseInt(req.getParameter("field-id")));
+        				req.setAttribute("errorMessage", "O livro já está cadastrado!"); // TODO: implementar processamento dessa mensagem no front-end
+        				req.setAttribute("book", book);
+        				dispatcher = req.getRequestDispatcher("/edit-book.jsp");
+        				//dispatcher.forward(req, resp);
+        			} else {
+        				book = new Book();
+        				
+        				book.setName(req.getParameter("field-name"));
+        				// field-date, string to LocalDate 'dd/MM/yyyy'
+        				book.setDate(java.time.LocalDate.parse(req.getParameter("field-date"), java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        				book.setAuthor(req.getParameter("field-author"));
+        				book.setStatus(Integer.valueOf(req.getParameter("field-status")));
+        				
+        				repository.insert(book);
+        				
+        				dispatcher = req.getRequestDispatcher("/books");
+        				//dispatcher.forward(req, resp);
+        			}
+        		} catch (Exception e) {
+        			errorMessage = e.getMessage();
+        			System.out.println(errorMessage);
+                	req.setAttribute("errorMessage", errorMessage);
+        			dispatcher = req.getRequestDispatcher("../register-book.jsp");
+        			// add no final
+					//dispatcher.forward(req, resp);
+        		}
+        	} else {
+        		throw new Exception("Ops! Usuário sem permissão.");
+        	}
+        } catch (Exception e){
+        	System.out.println(e.getMessage());
+        	errorMessage = "Ops! Usuário sem permissão. ";
+        	req.setAttribute("errorMessage", errorMessage);
+        	dispatcher = req.getRequestDispatcher("../blib.jsp");
+        }
+        
+        dispatcher.forward(req, resp);
+		
+		// ------------------------ add
+		
+
+        
+	}
+
+}

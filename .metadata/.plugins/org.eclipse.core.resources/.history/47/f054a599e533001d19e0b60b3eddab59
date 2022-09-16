@@ -1,0 +1,67 @@
+package servlets;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import models.Tools;
+import models.User;
+import repository.IUserRepository;
+import repository.UserRepository;
+
+
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 11L;
+
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		IUserRepository repository = new UserRepository();
+        req.setCharacterEncoding("utf-8");
+        
+        String errorMessage = "";
+        String path = req.getContextPath();
+        
+        HttpSession session = req.getSession(true);
+
+        try {
+        	String username = req.getParameter("field-user");
+        	String password = req.getParameter("field-password");
+        	
+        	if(Tools.isValidUsername(username) && Tools.isValidPassword(password)) {
+        		System.out.println("log: login - buscando user");
+        		User user = repository.find(username);
+        		
+        		if(user != null && user.getPassword().equals(password)) {
+        			session.setAttribute("name", user.getName());
+        			session.setAttribute("type", user.getType().toInteger());
+        			session.setAttribute("login", true);
+        			
+        			System.out.println("log: Ok login");
+        			
+        			RequestDispatcher dispatcher = req.getRequestDispatcher("/books");
+        	        dispatcher.forward(req, resp);
+        		} else {
+        			errorMessage = "senha inválida";
+        		}
+        	} else {
+        		errorMessage = "usuário e senha inválidos";
+        	}
+        } catch (Exception error) {
+        	System.out.println(error.getMessage());
+        	errorMessage = "ops! Algo deu errado";
+        }
+
+
+        
+        session.setAttribute("login", false);
+        req.setAttribute("errorMessage", errorMessage);
+    	RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
+        dispatcher.forward(req, resp);
+	}
+}

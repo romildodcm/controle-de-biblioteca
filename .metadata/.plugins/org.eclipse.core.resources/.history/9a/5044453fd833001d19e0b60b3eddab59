@@ -1,0 +1,47 @@
+package servlets;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import models.Book;
+import repository.BookRepository;
+
+@WebServlet(name = "books" ,urlPatterns = {"", "/books"})
+public class BookServlet extends HttpServlet {
+	
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO: implementar validação login
+        // valid session and if is UserType 0 or 
+		
+		String path = req.getContextPath();
+
+		BookRepository repository = new BookRepository();
+		
+		List<Book> books = new ArrayList<>();
+		
+		try {
+			books = repository.findAll();
+		
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		req.setAttribute("books", books);
+		
+		RequestDispatcher dispatcher = req.getRequestDispatcher(path+"/books.jsp");
+		dispatcher.forward(req, resp);
+		
+	}
+
+}

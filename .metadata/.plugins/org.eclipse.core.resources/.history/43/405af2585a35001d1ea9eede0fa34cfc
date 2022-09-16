@@ -1,0 +1,69 @@
+package servlets;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import models.User;
+import models.UserType;
+import repository.IUserRepository;
+import repository.UserRepository;
+
+@MultipartConfig
+@WebServlet("/users/edit")
+public class UserEditServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		IUserRepository repository = new UserRepository();
+		req.setCharacterEncoding("utf-8");
+		String errorMessage = "";
+		
+		HttpSession session = req.getSession(false);
+        
+        try {
+        	Integer type = (Integer) session.getAttribute("type");
+            Boolean login = (Boolean) session.getAttribute("login");
+            
+            if (type == UserType.ADMIN.toInteger() && login == true) {
+            	if (req.getParameter("id") != null) {
+        			Integer id = Integer.valueOf(req.getParameter("id"));
+        			User user = repository.find(id);
+
+        			req.setAttribute("user", user);
+        			RequestDispatcher dispatcher = req.getRequestDispatcher("../edit-user.jsp");
+        			dispatcher.forward(req, resp);
+        		} else {
+        			errorMessage = "id inválido"
+        			User user = new User();
+
+        			user.setId(Integer.valueOf(req.getParameter("field-id")));
+        			user.setName(req.getParameter("field-name"));
+        			user.setUsername(req.getParameter("field-username"));
+        			user.setPassword(req.getParameter("field-password"));
+        			user.setType(Integer.valueOf(req.getParameter("field-type")));
+        			
+        			repository.update(user);
+
+        			RequestDispatcher dispatcher = req.getRequestDispatcher("/users");
+        			dispatcher.forward(req, resp);
+        		}
+            } else {
+            	throw new Exception("Ops! Usuário sem permissão.");
+            }
+        } catch (Exception e){
+        	System.out.println(e.getMessage());
+        	errorMessage = e.getMessage();
+        }
+
+		
+	}
+}

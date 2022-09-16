@@ -1,0 +1,49 @@
+package servlets;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+@WebServlet(name = "blib" ,urlPatterns = {"", "/blib"})
+public class BlibServlet extends HttpServlet {
+	private static final long serialVersionUID = 11L;
+
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("utf-8");
+        String errorMessage = "";
+        //String path = req.getContextPath();
+        
+        HttpSession session = req.getSession(false);
+        
+        try {
+            Boolean login = (Boolean) session.getAttribute("login");
+            
+        	if (login == true) {
+        		RequestDispatcher dispatcher = req.getRequestDispatcher("/blib.jsp");
+        		dispatcher.forward(req, resp);
+        	} else {
+        		throw new Exception("Ops! Faça login para acessar.");
+        	}
+        } catch (Exception e){
+        	System.out.println(e.getMessage());
+        	errorMessage = e.getMessage();
+        }
+        
+        req.setAttribute("errorMessage", errorMessage);
+    	RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
+        dispatcher.forward(req, resp);
+        
+        //---------- ^with authentication^
+        
+        
+        // colocar lá no try
+		//RequestDispatcher dispatcher = req.getRequestDispatcher("/blib.jsp");
+		//dispatcher.forward(req, resp);
+	}
+}

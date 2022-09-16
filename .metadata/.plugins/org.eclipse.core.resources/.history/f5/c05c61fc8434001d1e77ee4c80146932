@@ -1,0 +1,46 @@
+package servlets;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+@WebServlet(name = "blib" ,urlPatterns = {"", "/blib"})
+public class BlibServlet extends HttpServlet {
+	private static final long serialVersionUID = 11L;
+
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("utf-8");
+        
+        String errorMessage = "";
+        String path = req.getContextPath();
+        
+        HttpSession session = req.getSession();
+
+        try {
+        	// TODO varifica a sessao e valida
+        	// se tudo certo, manda para o destino correto
+        	// aqui o que está no final
+        	if (true) {
+        		// executa o que for necessário e redireciona para a rota
+        	}
+        } catch (Exception e){
+        	System.out.println(e.getMessage());
+        	errorMessage = "ops! Usuário sem permissão";
+        }
+        
+        req.setAttribute("errorMessage", errorMessage);
+    	RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
+        dispatcher.forward(req, resp);
+        
+        
+        // colocar lá no try
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/blib.jsp");
+		dispatcher.forward(req, resp);
+	}
+}

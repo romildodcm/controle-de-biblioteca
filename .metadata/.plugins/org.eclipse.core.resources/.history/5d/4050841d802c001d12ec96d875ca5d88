@@ -1,5 +1,0 @@
-package Model;
-
-public enum BookStatus {
-	// disponível, emprestado ou indisponível
-}
